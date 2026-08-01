@@ -6,6 +6,7 @@ import type { SessionUser } from "@/lib/auth";
 import { Logo } from "./Logo";
 
 const links = [
+  { href: "/our-story", label: "Our Story" },
   { href: "/request-help", label: "Request Help" },
   { href: "/donate", label: "Donate" },
   { href: "/get-involved", label: "Get Involved" },

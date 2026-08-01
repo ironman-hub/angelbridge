@@ -77,7 +77,8 @@ export default async function HomePage() {
               people to the longer-term help they need — starting in Manchester, one community at a time.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/how-it-works" className="btn-primary">How it works</Link>
+              <Link href="/our-story" className="btn-primary">Read our story</Link>
+              <Link href="/how-it-works" className="btn-ghost">How it works</Link>
               <Link href="/impact" className="btn-ghost">Our impact</Link>
             </div>
           </div>
