@@ -1,7 +1,7 @@
 import { DonateForm } from "@/components/DonateForm";
 import { DONATION_TIERS } from "@/lib/constants";
 
-export default function DonatePage({ searchParams }: { searchParams: { amount?: string } }) {
+export default function DonatePage({ searchParams }: { searchParams: { amount?: string; status?: string } }) {
   const initial = searchParams.amount ? Number(searchParams.amount) : undefined;
   return (
     <div className="section max-w-4xl py-10">
@@ -20,7 +20,7 @@ export default function DonatePage({ searchParams }: { searchParams: { amount?: 
             </div>
           ))}
         </div>
-        <DonateForm initialAmount={initial} />
+        <DonateForm initialAmount={initial} status={searchParams.status} />
       </div>
     </div>
   );
