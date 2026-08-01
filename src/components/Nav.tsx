@@ -23,7 +23,7 @@ export function Nav({ user }: { user: SessionUser | null }) {
           <Logo size={40} className="shrink-0" />
           <span className="flex h-10 flex-col justify-center leading-none">
             <span className="text-lg font-extrabold text-brand-700">Angel Bridge</span>
-            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400">Foundation</span>
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-900">Foundation</span>
           </span>
         </Link>
 

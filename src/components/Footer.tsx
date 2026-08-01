@@ -10,7 +10,7 @@ export function Footer() {
             <Logo size={38} className="shrink-0" />
             <span className="flex h-[38px] flex-col justify-center leading-none">
               <span className="text-base font-extrabold text-brand-700">Angel Bridge</span>
-              <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400">Foundation</span>
+              <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-900">Foundation</span>
             </span>
           </div>
           <p className="mt-3 text-sm text-slate-500">
