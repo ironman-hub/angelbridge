@@ -146,9 +146,9 @@ async function main() {
       { caseId: closedCase.id, type: "created", message: "Help request submitted" },
       { caseId: closedCase.id, type: "assessed", message: "Assessed: Green / Approved" },
       { caseId: closedCase.id, type: "assigned", message: "Assigned to Sam Okoro (Response Van 1)" },
-      { caseId: closedCase.id, type: "dispatched", message: "Van dispatched — ETA 18 min" },
+      { caseId: closedCase.id, type: "dispatched", message: "Van dispatched, ETA 18 min" },
       { caseId: closedCase.id, type: "arrived", message: "Volunteer arrived on scene" },
-      { caseId: closedCase.id, type: "closed", message: "Case closed — all needs met" },
+      { caseId: closedCase.id, type: "closed", message: "Case closed, all needs met" },
     ],
   });
 

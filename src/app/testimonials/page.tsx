@@ -18,7 +18,7 @@ export default async function TestimonialsPage() {
 
       <div className="mt-8 grid gap-5 md:grid-cols-2">
         {testimonials.length === 0 && (
-          <p className="text-sm text-slate-500">No stories published yet — yours could be the first.</p>
+          <p className="text-sm text-slate-500">No stories published yet, yours could be the first.</p>
         )}
         {testimonials.map((t) => (
           <figure key={t.id} className="card p-6">

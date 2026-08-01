@@ -65,7 +65,7 @@ export function DonateForm({
     <form onSubmit={onSubmit} className="card space-y-5 p-6">
       {status === "cancelled" && (
         <p className="rounded-xl bg-amber-50 p-3 text-sm text-amber-800">
-          Payment cancelled — no charge was made. You can try again whenever you&apos;re ready.
+          Payment cancelled, no charge was made. You can try again whenever you&apos;re ready.
         </p>
       )}
       {errors.form && <p className="field-error">{errors.form}</p>}

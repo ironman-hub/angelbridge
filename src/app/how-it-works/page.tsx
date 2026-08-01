@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 const steps = [
-  ["Request help", "Create a verified account and complete a short, private assessment — your exact location and immediate needs, in 2–3 minutes."],
-  ["Fair assessment", "Our engine checks eligibility against seven criteria and scores vulnerability, priority and misuse risk — designed to reach genuine need, not to exclude."],
+  ["Request help", "Create a verified account and complete a short, private assessment, your exact location and immediate needs, in 2–3 minutes."],
+  ["Fair assessment", "Our engine checks eligibility against seven criteria and scores vulnerability, priority and misuse risk, designed to reach genuine need, not to exclude."],
   ["Dispatch", "For approved requests, the nearest response van is notified and a pick list is generated from the onboard inventory."],
-  ["Help is coming", "You watch help arrive in real time, with an ETA and live updates — just like waiting for a taxi."],
+  ["Help is coming", "You watch help arrive in real time, with an ETA and live updates, just like waiting for a taxi."],
   ["On scene", "A trained volunteer provides practical support: food, water, warmth, charging, hygiene, transport to safety."],
-  ["Bridge to more support", "Where useful, we refer you to housing, welfare, health or outreach partners — every action recorded to improve services and prove impact."],
+  ["Bridge to more support", "Where useful, we refer you to housing, welfare, health or outreach partners, every action recorded to improve services and prove impact."],
 ];
 
 export default function HowItWorksPage() {

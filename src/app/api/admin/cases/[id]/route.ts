@@ -35,10 +35,10 @@ export const PATCH = handler(async (req: NextRequest, ctx: { params: { id: strin
   // Reflect status changes in the applicant-facing timeline.
   if (data.status && data.status !== existing.status) {
     const messages: Record<string, string> = {
-      Approved: "Approved by our team — help is being arranged",
+      Approved: "Approved by our team, help is being arranged",
       Declined: "After review, we're unable to dispatch to this request",
       Escalated: "Escalated to a caseworker for review",
-      Closed: "Case closed — thank you",
+      Closed: "Case closed, thank you",
       Pending: "Returned to pending review",
     };
     await prisma.caseEvent.create({

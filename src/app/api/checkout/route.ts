@@ -56,7 +56,7 @@ export const POST = handler(async (req: NextRequest) => {
           currency: "gbp",
           unit_amount: amountPence,
           product_data: {
-            name: `Donation to Angel Bridge Foundation${data.tier ? ` — ${data.tier}` : ""}`,
+            name: `Donation to Angel Bridge Foundation${data.tier ? `, ${data.tier}` : ""}`,
           },
         },
       },

@@ -35,7 +35,7 @@ export default async function RequestHelpPage() {
     <div className="section max-w-2xl py-8">
       <h1 className="text-2xl font-bold text-slate-900">Request help</h1>
       <p className="mt-1 text-sm text-slate-500">
-        This takes 2–3 minutes. Answer honestly — it helps us reach the people who need us most.
+        This takes 2–3 minutes. Answer honestly, it helps us reach the people who need us most.
       </p>
       <div className="mt-6">
         <RequestHelpForm />

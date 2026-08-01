@@ -63,7 +63,7 @@ function Success({ text }: { text: string }) {
 
 function VolunteerForm() {
   const { errors, loading, done, submit } = useSubmit("/api/volunteers");
-  if (done) return <Success text="Thanks for offering your time — our volunteer team will be in touch." />;
+  if (done) return <Success text="Thanks for offering your time, our volunteer team will be in touch." />;
   return (
     <form
       className="card space-y-4 p-6"
@@ -90,7 +90,7 @@ function VolunteerForm() {
 
 function PartnerForm() {
   const { errors, loading, done, submit } = useSubmit("/api/partners");
-  if (done) return <Success text="Thanks — we'll be in touch about referral pathways and working together." />;
+  if (done) return <Success text="Thanks, we'll be in touch about referral pathways and working together." />;
   return (
     <form
       className="card space-y-4 p-6"
@@ -118,7 +118,7 @@ function PartnerForm() {
 function SponsorForm() {
   const { errors, loading, done, submit } = useSubmit("/api/sponsorships");
   const [type, setType] = useState("van");
-  if (done) return <Success text="Thank you for supporting the response — our team will contact you about your sponsorship." />;
+  if (done) return <Success text="Thank you for supporting the response, our team will contact you about your sponsorship." />;
   return (
     <form
       className="card space-y-4 p-6"

@@ -68,7 +68,7 @@ export function RequestHelpForm() {
         setLocating(false);
       },
       () => {
-        setErrors((e) => ({ ...e, location: "Could not get your location — please enter your address manually" }));
+        setErrors((e) => ({ ...e, location: "Could not get your location, please enter your address manually" }));
         setLocating(false);
       },
       { enableHighAccuracy: true, timeout: 10000 }
@@ -145,7 +145,7 @@ export function RequestHelpForm() {
             </button>
             {coords && (
               <p className="mt-2 text-xs font-medium text-green-700">
-                Location captured ({coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}) — helps a van reach you faster.
+                Location captured ({coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}), helps a van reach you faster.
               </p>
             )}
             {errors.location && <p className="field-error">{errors.location}</p>}

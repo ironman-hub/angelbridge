@@ -1,4 +1,4 @@
-// Angel Bridge Foundation — "on wheels" logo mark, inline so it renders crisply
+// Angel Bridge Foundation, "on wheels" logo mark, inline so it renders crisply
 // at any size with no extra network request. Used in the nav and footer.
 
 export function Logo({ size = 36, className = "" }: { size?: number; className?: string }) {

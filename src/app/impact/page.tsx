@@ -39,7 +39,7 @@ export default async function ImpactPage() {
 
       <div className="mt-10 rounded-2xl bg-brand-50 p-6 text-sm text-brand-900">
         <strong>First-year goal:</strong> help 100 people in Manchester safely and consistently, and measure
-        the difference we make — proof of the model before we scale across Greater Manchester and the UK.
+        the difference we make, proof of the model before we scale across Greater Manchester and the UK.
       </div>
     </div>
   );

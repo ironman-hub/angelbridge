@@ -8,7 +8,7 @@
 // Design principle from the brief: PREVENT MISUSE WITHOUT UNFAIRLY EXCLUDING
 // PEOPLE WHO GENUINELY NEED HELP. So only the four "in scope for Angel Bridge"
 // criteria can make someone ineligible. Concerns about repeat use or identity
-// escalate a case to a human — they do not auto-reject it.
+// escalate a case to a human, they do not auto-reject it.
 // ---------------------------------------------------------------------------
 
 import { isInPilotArea } from "./geo";
@@ -100,7 +100,7 @@ const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 export function assess(input: AssessmentInput): Assessment {
   const criteria: CriterionResult[] = [];
 
-  // 1 — Genuine immediate need (essential)
+  // 1, Genuine immediate need (essential)
   const genuineNeed =
     RECOGNISED_SITUATIONS.has(input.situationType) ||
     (input.situationType === "Other" && input.description.trim().length >= 20);
@@ -114,22 +114,22 @@ export function assess(input: AssessmentInput): Assessment {
       : "Situation not recognised as an emergency and too little detail provided",
   });
 
-  // 2 — Temporary crisis (essential): bridging a gap, not an ongoing need
+  // 2, Temporary crisis (essential): bridging a gap, not an ongoing need
   const temporary =
     Boolean(input.waitingFor && input.waitingFor.trim()) ||
     input.contactedHelp ||
     (input.estimatedWait != null && input.estimatedWait !== "");
   criteria.push({
     key: "temporary_crisis",
-    question: "Is this a temporary crisis — you are waiting for help, recovery, transport or accommodation?",
+    question: "Is this a temporary crisis, you are waiting for help, recovery, transport or accommodation?",
     passed: temporary,
     essential: true,
     detail: temporary
-      ? "Waiting on a resolving event — Angel Bridge bridges the gap"
+      ? "Waiting on a resolving event, Angel Bridge bridges the gap"
       : "No resolving event identified; may need long-term support instead",
   });
 
-  // 3 — Existing support contacted (NOT essential; 'where possible' per policy)
+  // 3, Existing support contacted (NOT essential; 'where possible' per policy)
   criteria.push({
     key: "support_contacted",
     question: "Have you already contacted the appropriate service or a family member where possible?",
@@ -140,7 +140,7 @@ export function assess(input: AssessmentInput): Assessment {
       : "No existing service contacted yet",
   });
 
-  // 4 — Immediate need within Angel Bridge's scope (essential)
+  // 4, Immediate need within Angel Bridge's scope (essential)
   const inScope = input.needs.some((n) => IN_SCOPE_NEEDS.has(n));
   criteria.push({
     key: "immediate_scope",
@@ -152,7 +152,7 @@ export function assess(input: AssessmentInput): Assessment {
       : "No requested need falls within Angel Bridge's immediate-support scope",
   });
 
-  // 5 — Identity (NOT essential; alternatives allowed)
+  // 5, Identity (NOT essential; alternatives allowed)
   const identityOk = input.emailVerified;
   criteria.push({
     key: "identity",
@@ -164,7 +164,7 @@ export function assess(input: AssessmentInput): Assessment {
     }`,
   });
 
-  // 6 — Location verified & within the current service area (essential)
+  // 6, Location verified & within the current service area (essential)
   const inArea = isInPilotArea(input.currentLat, input.currentLng);
   criteria.push({
     key: "location",
@@ -176,7 +176,7 @@ export function assess(input: AssessmentInput): Assessment {
       : "Outside the current pilot service area",
   });
 
-  // 7 — Repeat-request check (NOT essential; drives the support pathway)
+  // 7, Repeat-request check (NOT essential; drives the support pathway)
   const pathway: Assessment["pathway"] =
     input.requestsLast90Days > 5
       ? "referral"
@@ -189,7 +189,7 @@ export function assess(input: AssessmentInput): Assessment {
     passed: pathway !== "referral",
     essential: false,
     detail:
-      `${input.requestsLast90Days} request(s) in 90 days, ${input.requestsLast30Days} in 30 days — ` +
+      `${input.requestsLast90Days} request(s) in 90 days, ${input.requestsLast30Days} in 30 days, ` +
       (pathway === "standard"
         ? "standard assessment"
         : pathway === "enhanced"
@@ -259,15 +259,15 @@ export function assess(input: AssessmentInput): Assessment {
     recommendedStatus = "Escalated";
     reasons.push(
       pathway === "referral"
-        ? "Frequent requests — escalate to a caseworker / partner agency."
-        : "Elevated misuse indicators — human review before dispatch."
+        ? "Frequent requests, escalate to a caseworker / partner agency."
+        : "Elevated misuse indicators, human review before dispatch."
     );
   } else if (riskBand === "Amber") {
     recommendedStatus = "Pending";
-    reasons.push("Some concerns or repeat use — manual review recommended.");
+    reasons.push("Some concerns or repeat use, manual review recommended.");
   } else {
     recommendedStatus = "Approved";
-    reasons.push("Low risk and clearly in scope — approve and dispatch.");
+    reasons.push("Low risk and clearly in scope, approve and dispatch.");
   }
 
   return {

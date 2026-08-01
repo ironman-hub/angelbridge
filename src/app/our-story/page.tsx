@@ -2,13 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Our Story — Why Angel Bridge Foundation Exists",
+  title: "Our Story, Why Angel Bridge Foundation Exists",
   description:
     "Angel Bridge Foundation was not born in a boardroom. It began on the hard shoulder of the M60. This is why we exist.",
 };
 
 const partOne = [
-  "I was driving home towards Stockport. The road I needed was blocked, so I came off my planned route, used the carriageway opposite to reach a roundabout, made a safe U-turn back towards Stockport, and headed for the Bredbury junction. About four miles from my exit, I felt a sudden, sharp need to relieve myself — my stomach was rumbling with discomfort. I had to pull over. I parked safely on the hard shoulder, switched off the car, and quickly eased myself near the boundary fence alongside the motorway.",
+  "I was driving home towards Stockport. The road I needed was blocked, so I came off my planned route, used the carriageway opposite to reach a roundabout, made a safe U-turn back towards Stockport, and headed for the Bredbury junction. About four miles from my exit, I felt a sudden, sharp need to relieve myself, my stomach was rumbling with discomfort. I had to pull over. I parked safely on the hard shoulder, switched off the car, and quickly eased myself near the boundary fence alongside the motorway.",
   "After returning to my car, I realised I had made a simple mistake. In my rush, I had left the headlights on, draining the battery. The engine wouldn't start.",
   "Like most people would, I reached for my phone.",
   "I called my wife, but she was at work and couldn't leave. I called friends and family, but those who answered were either working themselves or too far away to reach me quickly.",
@@ -48,7 +48,7 @@ const whatIf = [
 const realisation = [
   "That experience changed the way I saw community. I realised there is often a gap between asking for help and receiving it.",
   "Emergency services have to prioritise life-threatening incidents. Breakdown companies can become overwhelmed. Family and friends may be unavailable.",
-  "Yet during that waiting period, people can still be cold, frightened, hungry, isolated or vulnerable — or their situation can escalate.",
+  "Yet during that waiting period, people can still be cold, frightened, hungry, isolated or vulnerable, or their situation can escalate.",
 ];
 
 const notReplace = [

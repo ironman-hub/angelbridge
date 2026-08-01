@@ -30,7 +30,7 @@ export const POST = handler(async (req: NextRequest) => {
 
   const appUrl = process.env.APP_URL ?? "http://localhost:3000";
   const verifyUrl = `${appUrl}/api/auth/verify?token=${verifyToken}`;
-  // No SMTP in the MVP — the link is logged and returned so dev can verify.
+  // No SMTP in the MVP, the link is logged and returned so dev can verify.
   console.log(`\n[email] Verify ${email}: ${verifyUrl}\n`);
 
   return ok({ ok: true, emailVerified: false, verifyUrl });

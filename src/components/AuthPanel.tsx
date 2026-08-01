@@ -66,14 +66,14 @@ export function AuthPanel() {
         {verifyUrl && (
           <div className="mt-4 rounded-xl bg-amber-50 p-3 text-xs text-amber-800">
             <p className="font-semibold">Demo / developer mode</p>
-            <p className="mt-1">No email service is configured yet — use this link to verify:</p>
+            <p className="mt-1">No email service is configured yet, use this link to verify:</p>
             <a href={verifyUrl} target="_blank" rel="noreferrer" className="mt-2 inline-block font-semibold text-brand-700 underline break-all">
               Verify my email now →
             </a>
           </div>
         )}
         <button onClick={() => router.refresh()} className="btn-primary mt-6 w-full">
-          I&apos;ve verified — continue
+          I&apos;ve verified, continue
         </button>
       </div>
     );
@@ -96,7 +96,7 @@ export function AuthPanel() {
 
       <p className="mb-4 text-sm text-slate-600">
         {mode === "login"
-          ? "Log in to submit your request — it keeps your information private and lets us keep you updated."
+          ? "Log in to submit your request, it keeps your information private and lets us keep you updated."
           : "It takes under a minute. You'll need a verified account so we can confirm your identity and keep you updated."}
       </p>
 

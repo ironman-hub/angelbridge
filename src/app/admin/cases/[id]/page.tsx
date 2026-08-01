@@ -53,7 +53,7 @@ export default async function AdminCaseDetail({ params }: { params: { id: string
         </Section>
 
         <Section title="Safety">
-          <Row k="Currently safe" v={c.isSafe ? "Yes" : `No — ${c.unsafeReason || ""}`} />
+          <Row k="Currently safe" v={c.isSafe ? "Yes" : `No, ${c.unsafeReason || ""}`} />
           <Row k="Injured" v={c.isInjured ? "Yes" : "No"} />
           <Row k="Others present" v={c.hasOthers ? parseArr(c.othersWith).join(", ") : "No"} />
         </Section>
@@ -120,7 +120,7 @@ export default async function AdminCaseDetail({ params }: { params: { id: string
           <ol className="mt-3 space-y-2 text-sm">
             {c.events.map((e) => (
               <li key={e.id} className="text-slate-600">
-                <span className="text-slate-400">{new Date(e.createdAt).toLocaleTimeString("en-GB")}</span> — {e.message}
+                <span className="text-slate-400">{new Date(e.createdAt).toLocaleTimeString("en-GB")}</span>, {e.message}
               </li>
             ))}
           </ol>
