@@ -49,7 +49,7 @@ export function Nav({ user }: { user: SessionUser | null }) {
           ) : (
             <>
               <Link href="/login" className="btn-ghost">Log in</Link>
-              <Link href="/request-help" className="btn-accent">Get help now</Link>
+              <Link href="/request-help" className="btn-green">Get help now</Link>
             </>
           )}
         </div>
@@ -81,7 +81,7 @@ export function Nav({ user }: { user: SessionUser | null }) {
               ) : (
                 <>
                   <Link href="/login" className="btn-ghost" onClick={() => setOpen(false)}>Log in</Link>
-                  <Link href="/request-help" className="btn-accent" onClick={() => setOpen(false)}>Get help now</Link>
+                  <Link href="/request-help" className="btn-green" onClick={() => setOpen(false)}>Get help now</Link>
                 </>
               )}
             </div>

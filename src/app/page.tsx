@@ -45,12 +45,14 @@ export default async function HomePage() {
               response unit while longer-term services are on their way.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/request-help" className="btn-accent px-6 py-3 text-base">Get help now</Link>
+              <Link href="/request-help" className="btn-green px-6 py-3 text-base">Get help now</Link>
               <Link href="/donate" className="btn px-6 py-3 text-base bg-white text-brand-700 hover:bg-brand-50">Donate</Link>
               <Link href="/get-involved" className="btn px-6 py-3 text-base bg-transparent text-white ring-1 ring-white/40 hover:bg-white/10">Volunteer</Link>
             </div>
-            <p className="mt-4 text-sm text-brand-100">
-              In a life-threatening emergency, always call <strong>999</strong>.
+            <p className="mt-4">
+              <span className="inline-block rounded-lg bg-red-600 px-3 py-1.5 text-sm font-semibold text-white">
+                In a life-threatening emergency, always call 999.
+              </span>
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 self-center">

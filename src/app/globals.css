@@ -20,6 +20,9 @@ body {
   .btn-accent {
     @apply btn bg-accent-500 text-white hover:bg-accent-600 focus:ring-accent-500;
   }
+  .btn-green {
+    @apply btn bg-green-600 text-white hover:bg-green-700 focus:ring-green-500;
+  }
   .btn-ghost {
     @apply btn bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 focus:ring-brand-500;
   }
