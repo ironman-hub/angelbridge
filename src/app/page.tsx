@@ -174,10 +174,7 @@ export default async function HomePage() {
       {/* Donation tiers */}
       <section className="bg-white">
         <div className="section py-16">
-          <div className="flex items-end justify-between">
-            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Your donation, made tangible</h2>
-            <Link href="/transparency" className="hidden text-sm font-semibold text-brand-700 sm:block">Our transparency →</Link>
-          </div>
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Your donation, made tangible</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {DONATION_TIERS.map((t) => (
               <div key={t.amount} className="card flex flex-col p-5">

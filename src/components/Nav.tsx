@@ -11,7 +11,6 @@ const links = [
   { href: "/donate", label: "Donate" },
   { href: "/get-involved", label: "Get Involved" },
   { href: "/impact", label: "Impact" },
-  { href: "/transparency", label: "Transparency" },
   { href: "/testimonials", label: "Stories" },
 ];
 
