@@ -33,8 +33,19 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="overflow-hidden bg-gradient-to-b from-brand-700 to-brand-600 text-white">
-        <div className="section grid gap-8 py-16 lg:grid-cols-2 lg:py-24">
+      <section className="relative overflow-hidden text-white">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/hero.jpg')" }}
+          aria-hidden="true"
+        />
+        {/* Blue overlay keeps white text readable */}
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-brand-900/95 via-brand-800/85 to-brand-700/60"
+          aria-hidden="true"
+        />
+        <div className="section relative grid gap-8 py-16 lg:grid-cols-2 lg:py-24">
           <div>
             <span className="chip hero-item bg-white/15 text-white" style={{ animationDelay: "0ms" }}>
               Piloting in Manchester
