@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const partOne = [
-  "I was driving home towards Romiley after taking the Bredbury exit when my car suddenly lost power. At the same time, I urgently needed to stop, so I pulled safely onto the hard shoulder.",
+  "I was driving home towards Stockport. The road I needed was blocked, so I came off my planned route, used the carriageway opposite to reach a roundabout, made a safe U-turn back towards Stockport, and headed for the Bredbury junction. About four miles from my exit, I felt a sudden, sharp need to relieve myself — my stomach was rumbling with discomfort. I had to pull over. I parked safely on the hard shoulder, switched off the car, and quickly eased myself near the boundary fence alongside the motorway.",
   "After returning to my car, I realised I had made a simple mistake. In my rush, I had left the headlights on, draining the battery. The engine wouldn't start.",
   "Like most people would, I reached for my phone.",
   "I called my wife, but she was at work and couldn't leave. I called friends and family, but those who answered were either working themselves or too far away to reach me quickly.",
@@ -22,9 +22,9 @@ const partTwo = [
 
 const partThree = [
   "The cold became unbearable.",
-  "I wasn't dressed for hours outside in winter conditions, and because I suffer from cold urticaria, my body began reacting to the freezing temperatures.",
-  "I became increasingly worried — not only about the cold, but about being alone.",
-  "Unsure what else to do, I called the ambulance service, hoping there might be some way to obtain antihistamines or advice for my reaction. They explained that this was not a service they could provide.",
+  "I wasn't dressed in proper warm clothes for hours outside in winter conditions, and because I suffer from cold urticaria, my body began reacting to the freezing temperatures.",
+  "I became increasingly worried, not only about the cold, but about being alone.",
+  "Unsure what else to do, I called the ambulance service, hoping there might be some way to obtain antihistamines or have them delivered to me. They explained that this was not a service they could provide.",
   "Running out of options, I contacted the police to ask if there was any assistance available. Unfortunately, they were unable to help in the way I had hoped.",
   "I called RAC again and explained that I no longer felt safe waiting in those conditions. Thankfully, they managed to reduce my estimated waiting time to around two hours.",
   "During that wait, a traffic police officer stopped to check that I was in a safe position and that traffic was flowing normally before continuing with their duties.",
@@ -48,7 +48,7 @@ const whatIf = [
 const realisation = [
   "That experience changed the way I saw community. I realised there is often a gap between asking for help and receiving it.",
   "Emergency services have to prioritise life-threatening incidents. Breakdown companies can become overwhelmed. Family and friends may be unavailable.",
-  "Yet during that waiting period, people can still be cold, frightened, hungry, isolated, or vulnerable.",
+  "Yet during that waiting period, people can still be cold, frightened, hungry, isolated or vulnerable — or their situation can escalate.",
 ];
 
 const notReplace = [
@@ -89,7 +89,7 @@ export default function OurStoryPage() {
           Angel Bridge Foundation was not born in a boardroom.
         </p>
         <p className="text-center text-2xl font-extrabold text-brand-700">
-          It began on the hard shoulder of the M60.
+          It began on the hard shoulder of the M60, about four miles from the Bredbury junction.
         </p>
 
         {partOne.map((t, i) => (
