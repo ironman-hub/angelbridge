@@ -13,7 +13,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Angel Bridge Foundation — Help for people stranded",
+  title: "Angel Bridge Foundation",
   description:
     "Angel Bridge bridges the gap between a crisis and the help that's coming. Immediate practical support for people stranded in Manchester.",
   manifest: "/manifest.json",

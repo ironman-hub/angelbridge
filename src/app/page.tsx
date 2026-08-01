@@ -40,7 +40,7 @@ export default async function HomePage() {
               Piloting in Manchester
             </span>
             <h1
-              className="hero-item mt-4 text-5xl font-extrabold leading-tight sm:text-6xl"
+              className="hero-item mt-4 text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl"
               style={{ animationDelay: "90ms" }}
             >
               Help that arrives while you wait, for anyone left “stranded”.
