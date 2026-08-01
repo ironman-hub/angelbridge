@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { getCurrentUser } from "@/lib/auth";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Angel Bridge Foundation — Help for people stranded",
@@ -29,8 +37,8 @@ export default async function RootLayout({
 }) {
   const user = await getCurrentUser();
   return (
-    <html lang="en-GB">
-      <body className="min-h-screen flex flex-col">
+    <html lang="en-GB" className={poppins.variable}>
+      <body className="min-h-screen flex flex-col font-sans">
         <Nav user={user} />
         <main className="flex-1">{children}</main>
         <Footer />
