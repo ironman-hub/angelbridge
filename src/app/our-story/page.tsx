@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { StoryTabs } from "@/components/StoryTabs";
 
 export const metadata: Metadata = {
   title: "Our Story, Why Angel Bridge Foundation Exists",
@@ -84,7 +85,8 @@ export default function OurStoryPage() {
         <p className="mt-3 text-lg italic text-slate-500">One cold afternoon changed everything.</p>
       </header>
 
-      <div className="mt-12 space-y-6">
+      <StoryTabs>
+      <div className="space-y-6">
         <p className="text-xl font-semibold leading-8 text-slate-900">
           Angel Bridge Foundation was not born in a boardroom.
         </p>
@@ -166,6 +168,7 @@ export default function OurStoryPage() {
           Because no one should have to wait alone.
         </p>
       </div>
+      </StoryTabs>
 
       {/* CTA */}
       <div className="mt-8 flex flex-wrap justify-center gap-3 border-t border-slate-200 pt-10">
