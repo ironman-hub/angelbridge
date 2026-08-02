@@ -1,178 +1,277 @@
 import Link from "next/link";
-import type { Metadata } from "next";
+import { prisma } from "@/lib/db";
+import { computeImpact } from "@/lib/metrics";
+import { DONATION_TIERS } from "@/lib/constants";
+import { Reveal } from "@/components/Reveal";
 
-export const metadata: Metadata = {
-  title: "Our Story, Why Angel Bridge Foundation Exists",
-  description:
-    "Angel Bridge Foundation was not born in a boardroom. It began on the hard shoulder of the M60. This is why we exist.",
-};
+export const dynamic = "force-dynamic";
 
-const partOne = [
-  "I was driving home towards Stockport. The road I needed was blocked, so I came off my planned route, used the carriageway opposite to reach a roundabout, made a safe U-turn back towards Stockport, and headed for the Bredbury junction. About four miles from my exit, I felt a sudden, sharp need to relieve myself, my stomach was rumbling with discomfort. I had to pull over. I parked safely on the hard shoulder, switched off the car, and quickly eased myself near the boundary fence alongside the motorway.",
-  "After returning to my car, I realised I had made a simple mistake. In my rush, I had left the headlights on, draining the battery. The engine wouldn't start.",
-  "Like most people would, I reached for my phone.",
-  "I called my wife, but she was at work and couldn't leave. I called friends and family, but those who answered were either working themselves or too far away to reach me quickly.",
-  "Thankfully, I had roadside assistance through my insurance, so I contacted RAC.",
-  "The response I received was that help would take approximately four hours.",
+const HOW_STEPS = [
+  ["Request in minutes", "A short, private assessment captures your exact location and immediate needs."],
+  ["We assess fairly", "Our system checks eligibility and prioritises by need, built to reach genuine crises, not exclude people."],
+  ["Help is dispatched", "Like watching for a taxi, you see our response unit coming with a live ETA."],
+  ["Bridge to more support", "We meet the immediate need and, where useful, refer you to housing, health or outreach partners."],
 ];
 
-const partTwo = [
-  "Anyone who has stood on the hard shoulder of a motorway knows how frightening it can feel. Vehicles thunder past at motorway speeds only a few metres away. The Highway Code advises people to move behind the safety barrier where possible rather than remain inside the vehicle.",
+const PROVIDE = [
+  ["🥪", "Food & water"],
+  ["🧥", "Warm clothing & blankets"],
+  ["🔌", "Phone charging"],
+  ["🚗", "Safe transport"],
+  ["⛽", "Fuel & vehicle help"],
+  ["🧼", "Hygiene kits"],
+  ["🍼", "Baby & family supplies"],
+  ["➕", "Basic first aid"],
 ];
 
-const partThree = [
-  "The cold became unbearable.",
-  "I wasn't dressed in proper warm clothes for hours outside in winter conditions, and because I suffer from cold urticaria, my body began reacting to the freezing temperatures.",
-  "I became increasingly worried, not only about the cold, but about being alone.",
-  "Unsure what else to do, I called the ambulance service, hoping there might be some way to obtain antihistamines or have them delivered to me. They explained that this was not a service they could provide.",
-  "Running out of options, I contacted the police to ask if there was any assistance available. Unfortunately, they were unable to help in the way I had hoped.",
-  "I called RAC again and explained that I no longer felt safe waiting in those conditions. Thankfully, they managed to reduce my estimated waiting time to around two hours.",
-  "During that wait, a traffic police officer stopped to check that I was in a safe position and that traffic was flowing normally before continuing with their duties.",
-  "Eventually, the recovery vehicle arrived. The technician connected a jump starter.",
-];
+export default async function HomePage() {
+  const [impact, stories] = await Promise.all([
+    computeImpact(),
+    prisma.testimonial.findMany({ where: { approved: true }, orderBy: { createdAt: "desc" }, take: 2 }),
+  ]);
 
-const partFour = [
-  "After hours of waiting in the cold, the solution itself took less time than making a cup of tea.",
-  "As I drove home with the heater finally warming my hands, I couldn't stop thinking. I kept asking myself the same question.",
-];
-
-const whatIf = [
-  "What if it had been an elderly person?",
-  "A young student?",
-  "A mother with children?",
-  "Someone with a disability?",
-  "Someone with a medical condition?",
-  "Someone who had nowhere else to turn?",
-];
-
-const realisation = [
-  "That experience changed the way I saw community. I realised there is often a gap between asking for help and receiving it.",
-  "Emergency services have to prioritise life-threatening incidents. Breakdown companies can become overwhelmed. Family and friends may be unavailable.",
-  "Yet during that waiting period, people can still be cold, frightened, hungry, isolated or vulnerable, or their situation can escalate.",
-];
-
-const notReplace = [
-  "We are not here to replace the emergency services.",
-  "We are not here to replace roadside assistance.",
-  "We are not here to replace charities or local authorities.",
-];
-
-const acts = [
-  "To bring a blanket when someone is freezing.",
-  "To provide a phone charger when their battery is dead.",
-  "To offer food and water while they wait.",
-  "To sit with someone who feels alone.",
-  "To provide reassurance when fear begins to take over.",
-];
-
-function Para({ children }: { children: React.ReactNode }) {
-  return <p className="text-lg leading-8 text-slate-700">{children}</p>;
-}
-
-function Beat({ children }: { children: React.ReactNode }) {
-  return <p className="my-8 text-center text-2xl font-bold text-slate-900">{children}</p>;
-}
-
-export default function OurStoryPage() {
   return (
-    <article className="section max-w-3xl py-12">
-      <header className="text-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Our Story</p>
-        <h1 className="mt-3 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
-          Why Angel Bridge Foundation Exists
-        </h1>
-        <p className="mt-3 text-lg italic text-slate-500">One cold afternoon changed everything.</p>
-      </header>
-
-      <div className="mt-12 space-y-6">
-        <p className="text-xl font-semibold leading-8 text-slate-900">
-          Angel Bridge Foundation was not born in a boardroom.
-        </p>
-        <p className="text-center text-2xl font-extrabold text-brand-700">
-          It began on the hard shoulder of the M60, about four miles from the Bredbury junction.
-        </p>
-
-        {partOne.map((t, i) => (
-          <Para key={i}>{t}</Para>
-        ))}
-
-        <div className="my-10 rounded-2xl bg-slate-900 px-6 py-8 text-center text-white">
-          <p className="text-3xl font-extrabold">Four hours.</p>
-          <p className="mt-1 text-lg text-slate-300">On a busy motorway.</p>
-          <p className="text-lg text-slate-300">In freezing weather.</p>
+    <>
+      {/* Hero */}
+      <section className="relative overflow-hidden text-white">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/hero.jpg')" }}
+          aria-hidden="true"
+        />
+        {/* Blue overlay keeps white text readable */}
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-brand-900/95 via-brand-800/85 to-brand-700/60"
+          aria-hidden="true"
+        />
+        <div className="section relative grid gap-8 py-16 lg:grid-cols-2 lg:py-24">
+          <div>
+            <span className="chip hero-item bg-white/15 text-white" style={{ animationDelay: "0ms" }}>
+              Piloting in Manchester
+            </span>
+            <h1
+              className="hero-item mt-4 text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl"
+              style={{ animationDelay: "90ms" }}
+            >
+              Help that arrives while you wait, for anyone left “stranded”.
+            </h1>
+            <p className="hero-item mt-4 max-w-xl text-lg text-brand-50" style={{ animationDelay: "190ms" }}>
+              Angel Bridge Foundation bridges the gap between a crisis and the help that&apos;s coming: food,
+              water, warmth, phone charging and safe transport for people stranded, delivered by our mobile
+              response unit while longer-term services are on their way.
+            </p>
+            <div className="hero-item mt-8 flex flex-wrap gap-3" style={{ animationDelay: "290ms" }}>
+              <Link href="/request-help" className="btn-green px-6 py-3 text-base">Get help now</Link>
+              <Link href="/donate" className="btn px-6 py-3 text-base bg-white text-brand-700 hover:bg-brand-50">Donate</Link>
+              <Link href="/get-involved" className="btn px-6 py-3 text-base bg-transparent text-white ring-1 ring-white/40 hover:bg-white/10">Volunteer</Link>
+            </div>
+            <p className="hero-item mt-4" style={{ animationDelay: "380ms" }}>
+              <span className="inline-block rounded-lg bg-red-600 px-3 py-1.5 text-sm font-semibold text-white shadow-lg">
+                In a life-threatening emergency, always call 999.
+              </span>
+            </p>
+          </div>
+          <div className="hero-item grid grid-cols-2 gap-4 self-center" style={{ animationDelay: "240ms" }}>
+            <Stat label="People helped" value={impact.peopleHelped} />
+            <Stat label="Avg response" value={impact.averageResponseMins != null ? `${impact.averageResponseMins} min` : "—"} />
+            <Stat label="Children assisted" value={impact.childrenAssisted} />
+            <Stat label="Areas covered" value={impact.geographicCoverage} />
+          </div>
         </div>
+      </section>
 
-        {partTwo.map((t, i) => (
-          <Para key={i}>{t}</Para>
-        ))}
+      {/* Mission / about */}
+      <section className="section py-16">
+        <Reveal>
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Who we are</h2>
+              <p className="mt-4 text-slate-600">
+                Angel Bridge Foundation is a non-profit community response service. Emergencies happen to
+                anyone, anywhere, at any time, a breakdown, a cancelled last train, a lost wallet, a housing
+                crisis. The right services often exist, but there&apos;s a gap between when help is needed and
+                when it arrives that could be detrimental.
+              </p>
+              <p className="mt-3 text-slate-600">
+                We live and breathe to fill that gap. We provide immediate, practical support during the
+                waiting period and connect people to the longer-term help they need, starting in Manchester,
+                one community at a time, and going beyond.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link href="/our-story" className="btn-primary">Read our story</Link>
+                <Link href="/how-it-works" className="btn-ghost">How it works</Link>
+                <Link href="/impact" className="btn-ghost">Our impact</Link>
+              </div>
+            </div>
+            <div className="card hover-lift p-6">
+              <h3 className="text-lg font-semibold text-slate-900">We don&apos;t replace existing services!</h3>
+              <p className="mt-2 text-slate-600">
+                Food banks, roadside recovery, councils and emergency services all do vital work. Angel Bridge
+                Foundation connects people to them while providing immediate support during the wait, that&apos;s
+                our role, and our promise to the people and partners we work with.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-slate-700">
+                <li>✓ Immediate, practical help on scene</li>
+                <li>✓ A fair, private eligibility assessment</li>
+                <li>✓ Referrals to specialist partners where needed</li>
+                <li>✓ Every action recorded to safeguard and improve services</li>
+              </ul>
+            </div>
+          </div>
+        </Reveal>
+      </section>
 
-        <Beat>So I waited.</Beat>
-
-        {partThree.map((t, i) => (
-          <Para key={i}>{t}</Para>
-        ))}
-
-        <div className="my-10 text-center">
-          <p className="text-lg text-slate-500">Five minutes later…</p>
-          <p className="mt-1 text-3xl font-extrabold text-slate-900">My car started.</p>
-          <p className="mt-6 text-xl font-bold text-slate-700">That was it. Five minutes.</p>
+      {/* How it works */}
+      <section className="bg-white">
+        <div className="section py-16">
+          <Reveal>
+            <h2 className="text-center text-2xl font-bold text-slate-900 sm:text-3xl">How it works</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-center text-slate-600">
+              From request to resolution, you&apos;re supported and kept informed the whole way.
+            </p>
+          </Reveal>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {HOW_STEPS.map(([title, body], i) => (
+              <Reveal key={title} delay={i * 90}>
+                <div className="card hover-lift h-full p-6">
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-brand-600 font-bold text-white">{i + 1}</span>
+                  <h3 className="mt-3 font-semibold text-slate-900">{title}</h3>
+                  <p className="mt-1 text-sm text-slate-600">{body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
+      </section>
 
-        {partFour.map((t, i) => (
-          <Para key={i}>{t}</Para>
-        ))}
-
-        <p className="my-10 text-center text-3xl font-extrabold text-slate-900">
-          What if it hadn&apos;t been me?
-        </p>
-        <ul className="mx-auto my-8 max-w-md space-y-2 text-center text-lg italic text-slate-600">
-          {whatIf.map((q) => (
-            <li key={q}>{q}</li>
-          ))}
-        </ul>
-
-        {realisation.map((t, i) => (
-          <Para key={i}>{t}</Para>
-        ))}
-
-        <p className="my-10 text-center text-2xl font-extrabold text-brand-700">
-          That gap is where Angel Bridge Foundation was born.
-        </p>
-
-        <div className="my-8 space-y-1 border-l-4 border-slate-200 pl-6 text-lg text-slate-700">
-          {notReplace.map((t) => (
-            <p key={t}>{t}</p>
+      {/* What we provide */}
+      <section className="section py-16">
+        <Reveal>
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">What our response unit provides</h2>
+          <p className="mt-3 max-w-2xl text-slate-600">
+            Our mobile response unit is a mini support centre on wheels, stocked to meet immediate needs on the spot.
+          </p>
+        </Reveal>
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {PROVIDE.map(([icon, label], i) => (
+            <Reveal key={label} delay={i * 60}>
+              <div className="card hover-lift group flex h-full flex-col items-center gap-2 p-5 text-center">
+                <span className="text-3xl transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-125">{icon}</span>
+                <span className="text-sm font-medium text-slate-700">{label}</span>
+              </div>
+            </Reveal>
           ))}
         </div>
+      </section>
 
-        <p className="text-center text-2xl font-extrabold text-slate-900">We exist to bridge the gap.</p>
+      {/* Impact band */}
+      <section className="bg-brand-700 text-white">
+        <div className="section py-14">
+          <Reveal>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h2 className="text-2xl font-bold sm:text-3xl">Proving the model with evidence</h2>
+              <Link href="/impact" className="link-underline text-sm font-semibold text-white">See all our metrics →</Link>
+            </div>
+          </Reveal>
+          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+            {[
+              ["Food packs distributed", impact.foodPacksDistributed],
+              ["Blankets provided", impact.blanketsProvided],
+              ["Safe transport arranged", impact.safeTransportArranged],
+              ["Volunteer hours", impact.volunteerHours],
+            ].map(([label, value], i) => (
+              <Reveal key={label as string} delay={i * 90}>
+                <div className="rounded-2xl bg-white/10 p-5 transition-colors duration-300 hover:bg-white/20">
+                  <p className="text-3xl font-extrabold">{value}</p>
+                  <p className="mt-1 text-sm text-brand-100">{label}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        <ul className="my-8 space-y-3 rounded-2xl border border-slate-200 bg-white p-6">
-          {acts.map((t) => (
-            <li key={t} className="flex items-start gap-3 text-lg text-slate-700">
-              <span className="mt-1 text-brand-600">◆</span>
-              <span>{t}</span>
-            </li>
-          ))}
-        </ul>
+      {/* Stories */}
+      {stories.length > 0 && (
+        <section className="section py-16">
+          <Reveal>
+            <div className="flex items-end justify-between">
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Stories from people we&apos;ve helped</h2>
+              <Link href="/testimonials" className="link-underline hidden text-sm font-semibold text-brand-700 sm:block">Read more →</Link>
+            </div>
+          </Reveal>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            {stories.map((t, i) => (
+              <Reveal key={t.id} delay={i * 120}>
+                <figure className="card hover-lift h-full p-6">
+                  <div className="text-accent-500">{"★".repeat(t.rating)}</div>
+                  <blockquote className="mt-3 text-slate-700">“{t.story}”</blockquote>
+                  <figcaption className="mt-4 text-sm font-semibold text-slate-900">
+                    {t.authorName} <span className="font-normal text-slate-500">· {t.location}</span>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
 
-        <Para>
-          Sometimes the greatest act of kindness is simply making sure another human being doesn&apos;t have
-          to face a difficult moment alone.
-        </Para>
-        <Para>Every donation to Angel Bridge Foundation helps us become that bridge for someone else.</Para>
+      {/* Donation tiers */}
+      <section className="bg-white">
+        <div className="section py-16">
+          <Reveal>
+            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Your donation, made tangible</h2>
+            <p className="mt-2 text-slate-600">Give a set amount, or choose your own. Secure payment by card, Apple Pay or Google Pay.</p>
+          </Reveal>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {DONATION_TIERS.map((t, i) => (
+              <Reveal key={t.amount} delay={i * 70}>
+                <div className="card hover-lift flex h-full flex-col p-5">
+                  <p className="text-2xl font-extrabold text-brand-700">{t.label}</p>
+                  <p className="mt-2 flex-1 text-sm text-slate-600">{t.blurb}</p>
+                  <Link href={`/donate?amount=${t.amount}`} className="btn-primary mt-4">Give {t.label}</Link>
+                </div>
+              </Reveal>
+            ))}
+            <Reveal delay={DONATION_TIERS.length * 70}>
+              <div className="card hover-lift flex h-full flex-col border-2 border-brand-200 p-5">
+                <p className="text-2xl font-extrabold text-brand-700">Any amount</p>
+                <p className="mt-2 flex-1 text-sm text-slate-600">Enter exactly how much you&apos;d like to give, every pound helps.</p>
+                <Link href="/donate" className="btn-accent mt-4">Give a custom amount</Link>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
 
-        <p className="my-12 text-center text-3xl font-extrabold leading-snug text-brand-700">
-          Because no one should have to wait alone.
-        </p>
-      </div>
+      {/* Get involved CTA */}
+      <section className="section py-16">
+        <Reveal>
+          <div className="card grid items-center gap-6 p-8 md:grid-cols-2">
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900">Be part of the response</h2>
+              <p className="mt-2 text-slate-600">
+                Volunteer your time, become a referral partner, or sponsor a van or a family. Every contribution
+                keeps a response unit on the road.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 md:justify-end">
+              <Link href="/get-involved" className="btn-primary">Get involved</Link>
+              <Link href="/get-involved?tab=partner" className="btn-ghost">Become a partner</Link>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    </>
+  );
+}
 
-      {/* CTA */}
-      <div className="mt-8 flex flex-wrap justify-center gap-3 border-t border-slate-200 pt-10">
-        <Link href="/donate" className="btn-accent px-6 py-3">Donate</Link>
-        <Link href="/get-involved" className="btn-primary px-6 py-3">Get involved</Link>
-        <Link href="/request-help" className="btn-ghost px-6 py-3">Request help</Link>
-      </div>
-    </article>
+function Stat({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:bg-white/20">
+      <p className="text-3xl font-extrabold">{value}</p>
+      <p className="mt-1 text-sm text-brand-100">{label}</p>
+    </div>
   );
 }
