@@ -9,7 +9,7 @@ import { useState } from "react";
 //   • a Vimeo link,    e.g. "https://vimeo.com/123456789"
 // Leave it as "" to show a friendly "coming soon" placeholder.
 // ---------------------------------------------------------------------------
-const STORY_VIDEO_URL = "";
+const STORY_VIDEO_URL: string = "";
 
 function tabClass(active: boolean) {
   return `flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition ${
