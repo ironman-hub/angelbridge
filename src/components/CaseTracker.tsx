@@ -95,7 +95,7 @@ export function CaseTracker({ initial }: { initial: CaseData & { id: string } })
       {(declined || escalated) && (
         <div className={`rounded-2xl p-4 text-sm ${declined ? "bg-slate-100 text-slate-700" : "bg-purple-50 text-purple-900"}`}>
           {declined
-            ? "Based on your answers, this request falls outside what Angel Bridge can dispatch right now (for example, outside our current Manchester service area, or better suited to a specialist service). We've suggested alternatives on your dashboard, and if your situation changes you can submit again."
+            ? "Based on your answers, this request falls outside what Angel Bridge Foundation can dispatch right now (for example, outside our current Manchester service area, or better suited to a specialist service). We've suggested alternatives on your dashboard, and if your situation changes you can submit again."
             : "A caseworker is reviewing your request to make sure we support you in the best way, this can include a referral to a partner agency. You'll be updated here shortly."}
         </div>
       )}

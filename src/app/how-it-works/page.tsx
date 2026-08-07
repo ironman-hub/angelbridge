@@ -12,7 +12,7 @@ const steps = [
 export default function HowItWorksPage() {
   return (
     <div className="section max-w-3xl py-10">
-      <h1 className="text-3xl font-bold text-slate-900">How Angel Bridge works</h1>
+      <h1 className="text-3xl font-bold text-slate-900">How Angel Bridge Foundation works</h1>
       <p className="mt-2 text-slate-600">
         We bridge the gap between a crisis and the help that&apos;s already on its way. Here&apos;s the journey
         from request to resolution.

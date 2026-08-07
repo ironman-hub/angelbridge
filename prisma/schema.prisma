@@ -70,6 +70,7 @@ model Case {
 
   // Section — needs & resources (JSON string arrays)
   needs       String @default("[]")
+  needsOther  String?
   have        String @default("[]")
 
   // Section — safety
@@ -90,9 +91,18 @@ model Case {
   canBuyFood     Boolean @default(false)
   safeTonight    Boolean @default(false)
 
+  // Section — how to identify the person on scene
+  shareIdentity Boolean @default(true)
+  carReg        String?
+  surroundings  String?
+  wearing       String?
+
   // Section — previous & verification
   previousHelp Boolean @default(false)
   idVerified   Boolean @default(false)
+
+  // Consent to us calling 999 on their behalf if it becomes an emergency
+  consentEmergency Boolean @default(false)
 
   // Scoring (auto)
   eligible            Boolean @default(false)
@@ -116,6 +126,44 @@ model Case {
 
   events    CaseEvent[]
   movements InventoryMovement[]
+  incidentReport IncidentReport?
+}
+
+// ---------------------------------------------------------------------------
+// Incident reports — completed by an Angel Bridge Foundation member after
+// attending, with a feedback link sent to the assisted person.
+// ---------------------------------------------------------------------------
+
+model IncidentReport {
+  id     String @id @default(cuid())
+  caseId String @unique
+  case   Case   @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  completedByName  String @default("")
+  completedByEmail String @default("")
+
+  arrivedAt   DateTime?
+  completedAt DateTime?
+
+  summary       String  @default("") // what was found on arrival
+  helpProvided  String  @default("[]") // JSON array of help types given
+  suppliesGiven String  @default("") // free text list of items handed over
+  outcome       String  @default("") // how the situation was resolved
+  memberNotes   String  @default("")
+
+  emergencyServicesCalled Boolean @default(false)
+  emergencyServicesDetail String  @default("")
+
+  status String @default("draft") // draft | completed
+
+  // Feedback from the assisted person
+  feedbackToken       String    @unique
+  feedbackRating      Int?
+  feedbackComment     String?
+  feedbackSubmittedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model CaseEvent {

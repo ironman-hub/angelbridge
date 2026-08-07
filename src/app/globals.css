@@ -117,6 +117,15 @@ body {
   transform: scale(1.18) translateY(-2px);
 }
 
+/* ---- Print (incident report → PDF) ------------------------------------- */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff !important; }
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 0 8mm; }
+}
+
 /* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .reveal,

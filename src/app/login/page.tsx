@@ -33,7 +33,7 @@ export default function LoginPage() {
     <div className="section max-w-md py-12">
       <div className="card p-6">
         <h1 className="text-2xl font-bold text-slate-900">Log in</h1>
-        <p className="mt-1 text-sm text-slate-500">Welcome back to Angel Bridge.</p>
+        <p className="mt-1 text-sm text-slate-500">Welcome back to Angel Bridge Foundation.</p>
         {error && <p className="field-error mt-3">{error}</p>}
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div>

@@ -10,14 +10,17 @@ import {
   OTHERS_WITH_OPTIONS,
   CONTACTED_OPTIONS,
   WAIT_OPTIONS,
-  MONEY_OPTIONS,
 } from "@/lib/constants";
+
+const WHATSAPP_NUMBER = "447377129015";
 
 function nowLocalInput() {
   const d = new Date();
   d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
   return d.toISOString().slice(0, 16);
 }
+
+type YN = boolean | null;
 
 export function RequestHelpForm() {
   const router = useRouter();
@@ -34,22 +37,27 @@ export function RequestHelpForm() {
     currentPostcode: "",
     destinationAddress: "",
     needs: [] as string[],
+    needsOther: "",
     have: [] as string[],
-    isSafe: true,
+    isSafe: null as YN,
     unsafeReason: "",
-    isInjured: false,
-    hasOthers: false,
+    isInjured: null as YN,
+    hasOthers: null as YN,
     othersWith: [] as string[],
-    contactedHelp: false,
+    contactedHelp: null as YN,
     contactedWho: [] as string[],
     waitingFor: "",
     estimatedWait: "",
-    moneyAvailable: "",
-    canBuyFood: false,
-    safeTonight: false,
-    previousHelp: false,
+    canBuyFood: null as YN,
+    safeTonight: null as YN,
+    previousHelp: null as YN,
+    shareIdentity: true,
+    carReg: "",
+    surroundings: "",
+    wearing: "",
     declarationTrue: false,
     consent: false,
+    consentEmergency: false,
   });
 
   function set<K extends keyof typeof f>(key: K, val: (typeof f)[K]) {
@@ -75,8 +83,48 @@ export function RequestHelpForm() {
     );
   }
 
+  const whatsappHref = () => {
+    const parts = [
+      "Hello Angel Bridge Foundation, I am requesting help and would like to share my location.",
+      coords ? `My coordinates are ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}.` : "",
+      "I will now attach my live location using the WhatsApp attachment button.",
+    ].filter(Boolean);
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(parts.join(" "))}`;
+  };
+
+  function validate(): Record<string, string> {
+    const e: Record<string, string> = {};
+    if (!f.situationType) e.situationType = "Please choose what you are waiting for";
+    if (f.description.trim().length < 10) e.description = "Please describe what happened (at least 10 characters)";
+    if (f.situationType === "Other" && f.description.trim().length < 20)
+      e.description = "Because you chose Other, please explain your situation in a little more detail";
+    if (f.currentAddress.trim().length < 3) e.currentAddress = "Please tell us where you are";
+    if (f.currentPostcode.trim().length < 3) e.currentPostcode = "Please enter your postcode";
+    if (f.destinationAddress.trim().length < 2) e.destinationAddress = "Please tell us where you are heading";
+    if (f.needs.includes("Other") && f.needsOther.trim().length < 3)
+      e.needsOther = "Please explain what other help you need";
+    if (f.isSafe === null) e.isSafe = "Please answer";
+    if (f.isSafe === false && f.unsafeReason.trim().length < 3) e.unsafeReason = "Please tell us why";
+    if (f.isInjured === null) e.isInjured = "Please answer";
+    if (f.hasOthers === null) e.hasOthers = "Please answer";
+    if (f.contactedHelp === null) e.contactedHelp = "Please answer";
+    if (f.canBuyFood === null) e.canBuyFood = "Please answer";
+    if (f.safeTonight === null) e.safeTonight = "Please answer";
+    if (f.previousHelp === null) e.previousHelp = "Please answer";
+    if (!f.declarationTrue) e.declarationTrue = "Please confirm the declaration";
+    if (!f.consent) e.consent = "Consent is required to process your request";
+    if (!f.consentEmergency) e.consentEmergency = "Please acknowledge the emergency-services statement";
+    return e;
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const clientErrors = validate();
+    if (Object.keys(clientErrors).length) {
+      setErrors(clientErrors);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
     setLoading(true);
     setErrors({});
     const res = await fetch("/api/cases", {
@@ -114,9 +162,12 @@ export function RequestHelpForm() {
       {/* Situation */}
       <section className="card p-5">
         <h2 className="text-lg font-bold text-slate-900">Your situation</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Angel Bridge Foundation helps while you wait for the main service you have already called.
+        </p>
         <div className="mt-4 space-y-4">
           <div>
-            <label className="label">What best describes your situation?</label>
+            <label className="label">What are you waiting for?</label>
             <select className="input" value={f.situationType} onChange={(e) => set("situationType", e.target.value)}>
               <option value="">Select…</option>
               {SITUATION_TYPES.map((s) => <option key={s}>{s}</option>)}
@@ -124,7 +175,9 @@ export function RequestHelpForm() {
             {errors.situationType && <p className="field-error">{errors.situationType}</p>}
           </div>
           <div>
-            <label className="label">Describe what happened</label>
+            <label className="label">
+              {f.situationType === "Other" ? "Please explain your situation" : "Describe what happened"}
+            </label>
             <textarea className="input min-h-[90px]" value={f.description} onChange={(e) => set("description", e.target.value)} />
             {errors.description && <p className="field-error">{errors.description}</p>}
           </div>
@@ -145,15 +198,33 @@ export function RequestHelpForm() {
             </button>
             {coords && (
               <p className="mt-2 text-xs font-medium text-green-700">
-                Location captured ({coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}), helps a van reach you faster.
+                Location captured ({coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}), helps Angel Bridge Foundation reach you faster.
               </p>
             )}
             {errors.location && <p className="field-error">{errors.location}</p>}
           </div>
+
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <p className="text-sm font-medium text-slate-700">Prefer to share your location on WhatsApp?</p>
+            <p className="mt-1 text-xs text-slate-500">
+              This opens a WhatsApp chat with us. Tap the attachment (📎) button in WhatsApp and choose
+              <strong> Location → Share live location</strong> so we can find you.
+            </p>
+            <a
+              href={whatsappHref()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700"
+            >
+              💬 Share my location on WhatsApp
+            </a>
+            <p className="mt-2 text-[11px] text-slate-400">WhatsApp: +44 7377 129015</p>
+          </div>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="label">Current address / location</label>
-              <input className="input" value={f.currentAddress} onChange={(e) => set("currentAddress", e.target.value)} placeholder="e.g. Manchester Piccadilly Station" />
+              <input className="input" value={f.currentAddress} onChange={(e) => set("currentAddress", e.target.value)} placeholder="e.g. M60 hard shoulder near J25, or Manchester Piccadilly" />
               {errors.currentAddress && <p className="field-error">{errors.currentAddress}</p>}
             </div>
             <div>
@@ -176,7 +247,16 @@ export function RequestHelpForm() {
         <div className="mt-4">
           <CheckboxGroup options={NEED_OPTIONS} value={f.needs} onChange={(v) => set("needs", v)} />
         </div>
-        <label className="label mt-5">Which of these do you currently have?</label>
+        {f.needs.includes("Other") && (
+          <div className="mt-3">
+            <label className="label">You chose “Other”, please explain what you need</label>
+            <textarea className="input min-h-[70px]" value={f.needsOther} onChange={(e) => set("needsOther", e.target.value)} />
+            {errors.needsOther && <p className="field-error">{errors.needsOther}</p>}
+          </div>
+        )}
+
+        <label className="label mt-6">So we bring the right things, do you already have any of these? (optional)</label>
+        <p className="mb-2 text-xs text-slate-500">This just helps us pack. You can skip it if you’d rather not say.</p>
         <CheckboxGroup options={HAVE_OPTIONS} value={f.have} onChange={(v) => set("have", v)} />
       </section>
 
@@ -184,16 +264,17 @@ export function RequestHelpForm() {
       <section className="card p-5">
         <h2 className="text-lg font-bold text-slate-900">Safety</h2>
         <div className="mt-4 space-y-4">
-          <YesNo label="Are you currently safe?" value={f.isSafe} onChange={(v) => set("isSafe", v)} />
-          {!f.isSafe && (
+          <YesNo label="Are you currently safe?" value={f.isSafe} onChange={(v) => set("isSafe", v)} error={errors.isSafe} />
+          {f.isSafe === false && (
             <div>
               <label className="label">Tell us why you are unsafe</label>
               <textarea className="input" value={f.unsafeReason} onChange={(e) => set("unsafeReason", e.target.value)} />
+              {errors.unsafeReason && <p className="field-error">{errors.unsafeReason}</p>}
             </div>
           )}
-          <YesNo label="Are you injured?" value={f.isInjured} onChange={(v) => set("isInjured", v)} />
-          <YesNo label="Is anyone with you?" value={f.hasOthers} onChange={(v) => set("hasOthers", v)} />
-          {f.hasOthers && (
+          <YesNo label="Are you injured?" value={f.isInjured} onChange={(v) => set("isInjured", v)} error={errors.isInjured} />
+          <YesNo label="Is anyone with you?" value={f.hasOthers} onChange={(v) => set("hasOthers", v)} error={errors.hasOthers} />
+          {f.hasOthers === true && (
             <div>
               <label className="label">Who is with you?</label>
               <CheckboxGroup options={OTHERS_WITH_OPTIONS} value={f.othersWith} onChange={(v) => set("othersWith", v)} columns={3} />
@@ -206,8 +287,16 @@ export function RequestHelpForm() {
       <section className="card p-5">
         <h2 className="text-lg font-bold text-slate-900">Help already requested</h2>
         <div className="mt-4 space-y-4">
-          <YesNo label="Have you contacted anyone for help?" value={f.contactedHelp} onChange={(v) => set("contactedHelp", v)} />
-          {f.contactedHelp && (
+          <YesNo label="Have you contacted anyone for help?" value={f.contactedHelp} onChange={(v) => set("contactedHelp", v)} error={errors.contactedHelp} />
+          {f.contactedHelp === false && (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+              Angel Bridge Foundation supports people who have <strong>already requested primary help</strong>
+              {" "}(for example 999, the NHS, the police, or a breakdown company) and are facing a long wait that
+              may put their safety, condition or situation at risk. If you have not yet contacted a primary
+              service, please do that first. In a life-threatening emergency, always call <strong>999</strong>.
+            </div>
+          )}
+          {f.contactedHelp === true && (
             <div>
               <label className="label">Who have you contacted?</label>
               <CheckboxGroup options={CONTACTED_OPTIONS} value={f.contactedWho} onChange={(v) => set("contactedWho", v)} />
@@ -231,18 +320,42 @@ export function RequestHelpForm() {
 
       {/* Resources */}
       <section className="card p-5">
-        <h2 className="text-lg font-bold text-slate-900">Your current resources</h2>
+        <h2 className="text-lg font-bold text-slate-900">Your current situation</h2>
         <div className="mt-4 space-y-4">
-          <div>
-            <label className="label">How much money do you currently have available?</label>
-            <select className="input" value={f.moneyAvailable} onChange={(e) => set("moneyAvailable", e.target.value)}>
-              <option value="">Select…</option>
-              {MONEY_OPTIONS.map((m) => <option key={m}>{m}</option>)}
-            </select>
-          </div>
-          <YesNo label="Can you buy food yourself right now?" value={f.canBuyFood} onChange={(v) => set("canBuyFood", v)} />
-          <YesNo label="Do you have somewhere safe to stay tonight?" value={f.safeTonight} onChange={(v) => set("safeTonight", v)} />
-          <YesNo label="Have you received help from Angel Bridge before?" value={f.previousHelp} onChange={(v) => set("previousHelp", v)} />
+          <YesNo label="Can you buy food yourself right now?" value={f.canBuyFood} onChange={(v) => set("canBuyFood", v)} error={errors.canBuyFood} />
+          <YesNo label="Do you have somewhere safe to stay tonight?" value={f.safeTonight} onChange={(v) => set("safeTonight", v)} error={errors.safeTonight} />
+          <YesNo label="Have you received help from Angel Bridge Foundation before?" value={f.previousHelp} onChange={(v) => set("previousHelp", v)} error={errors.previousHelp} />
+        </div>
+      </section>
+
+      {/* How to identify you */}
+      <section className="card p-5">
+        <h2 className="text-lg font-bold text-slate-900">How to easily identify you</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          This helps our team find you quickly when they arrive. Sharing is optional.
+        </p>
+        <div className="mt-4 space-y-4">
+          <Check
+            label="I’d prefer not to share identifying details right now."
+            checked={!f.shareIdentity}
+            onChange={(v) => set("shareIdentity", !v)}
+          />
+          {f.shareIdentity && (
+            <div className="space-y-4">
+              <div>
+                <label className="label">Car registration (if in a vehicle)</label>
+                <input className="input" value={f.carReg} onChange={(e) => set("carReg", e.target.value)} placeholder="e.g. AB12 CDE" />
+              </div>
+              <div>
+                <label className="label">Description of the place or your surroundings</label>
+                <textarea className="input min-h-[70px]" value={f.surroundings} onChange={(e) => set("surroundings", e.target.value)} placeholder="e.g. by the blue recovery sign, near the second lamppost after the bridge" />
+              </div>
+              <div>
+                <label className="label">What are you wearing?</label>
+                <input className="input" value={f.wearing} onChange={(e) => set("wearing", e.target.value)} placeholder="e.g. grey hoodie, dark jeans" />
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -250,10 +363,12 @@ export function RequestHelpForm() {
       <section className="card p-5">
         <h2 className="text-lg font-bold text-slate-900">Declaration &amp; consent</h2>
         <div className="mt-4 space-y-3">
-          <Check label="I confirm the information I have provided is true to the best of my knowledge, and I understand Angel Bridge provides temporary emergency support, not a replacement for long-term services." checked={f.declarationTrue} onChange={(v) => set("declarationTrue", v)} />
+          <Check label="I confirm the information I have provided is true to the best of my knowledge, and I understand Angel Bridge Foundation provides temporary emergency support, not a replacement for long-term services." checked={f.declarationTrue} onChange={(v) => set("declarationTrue", v)} />
           {errors.declarationTrue && <p className="field-error">{errors.declarationTrue}</p>}
           <Check label="I consent to my information being processed to assess and provide assistance, in accordance with applicable data protection laws." checked={f.consent} onChange={(v) => set("consent", v)} />
           {errors.consent && <p className="field-error">{errors.consent}</p>}
+          <Check label="I understand that if my case is not something Angel Bridge Foundation can help with immediately and it is an emergency, Angel Bridge Foundation will ring the emergency services (fire, police or ambulance) for me." checked={f.consentEmergency} onChange={(v) => set("consentEmergency", v)} />
+          {errors.consentEmergency && <p className="field-error">{errors.consentEmergency}</p>}
         </div>
       </section>
 
@@ -264,24 +379,37 @@ export function RequestHelpForm() {
   );
 }
 
-function YesNo({ label, value, onChange }: { label: string; value: boolean; onChange: (v: boolean) => void }) {
+function YesNo({
+  label,
+  value,
+  onChange,
+  error,
+}: {
+  label: string;
+  value: boolean | null;
+  onChange: (v: boolean) => void;
+  error?: string;
+}) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
-      <div className="flex gap-2">
-        {[{ v: true, t: "Yes" }, { v: false, t: "No" }].map(({ v, t }) => (
-          <button
-            type="button"
-            key={t}
-            onClick={() => onChange(v)}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold ring-1 ${
-              value === v ? "bg-brand-600 text-white ring-brand-600" : "bg-white text-slate-600 ring-slate-200"
-            }`}
-          >
-            {t}
-          </button>
-        ))}
+    <div>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <span className="text-sm font-medium text-slate-700">{label}</span>
+        <div className="flex gap-2">
+          {[{ v: true, t: "Yes" }, { v: false, t: "No" }].map(({ v, t }) => (
+            <button
+              type="button"
+              key={t}
+              onClick={() => onChange(v)}
+              className={`rounded-lg px-4 py-2 text-sm font-semibold ring-1 ${
+                value === v ? "bg-brand-600 text-white ring-brand-600" : "bg-white text-slate-600 ring-slate-200"
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
       </div>
+      {error && <p className="field-error mt-1">{error}</p>}
     </div>
   );
 }

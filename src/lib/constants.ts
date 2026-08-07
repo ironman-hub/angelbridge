@@ -1,15 +1,19 @@
 // Shared option lists and reference data used across forms, scoring and admin.
 
+// These describe the WAIT people are stuck in after they have already
+// contacted a primary service. Angel Bridge Foundation bridges the gap while
+// that help is on its way, it is not itself the primary service.
 export const SITUATION_TYPES = [
-  "Vehicle breakdown",
-  "Public transport disruption",
-  "Lost wallet or belongings",
-  "Accommodation problem",
-  "Medical appointment delay",
-  "Domestic emergency",
-  "Waiting for roadside recovery",
-  "Waiting for family/friend",
-  "Waiting for emergency accommodation",
+  "Waiting for roadside recovery or a breakdown company",
+  "Waiting for an ambulance or NHS transport",
+  "Waiting for the police to attend",
+  "Waiting for the fire service",
+  "Waiting for family or a friend to reach me",
+  "Waiting for a taxi or booked transport",
+  "Waiting for emergency or temporary accommodation",
+  "Waiting for a fuel delivery",
+  "Stranded after public transport was cancelled or disrupted",
+  "Waiting for another service to respond",
   "Other",
 ] as const;
 
@@ -99,6 +103,24 @@ export const CASE_STATUSES = [
 ] as const;
 
 export const RISK_BANDS = ["Green", "Amber", "Red"] as const;
+
+// Help types a member can record as given on the incident report.
+export const HELP_PROVIDED_OPTIONS = [
+  "Food",
+  "Drinking Water",
+  "Warm Clothing / Blanket",
+  "Phone Charging",
+  "Transport",
+  "Fuel",
+  "Temporary Safe Place",
+  "Emotional Support / Reassurance",
+  "Toiletries",
+  "Baby Supplies",
+  "Medication Collection",
+  "Information / Signposting",
+  "Stayed with the person until primary help arrived",
+  "Other",
+] as const;
 
 // Which needs map to which inventory SKUs (used to auto-generate the volunteer pick list).
 export const NEED_TO_SKU: Record<string, string[]> = {

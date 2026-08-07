@@ -64,7 +64,7 @@ export function Footer() {
           <h4 className="text-sm font-semibold text-slate-900">Trust &amp; safety</h4>
           <p className="mt-3 text-sm text-slate-500">
             Your information is private and confidential and processed in line with UK data protection law.
-            Angel Bridge does not replace emergency services, always call 999 in an emergency.
+            Angel Bridge Foundation does not replace emergency services, always call 999 in an emergency.
           </p>
         </div>
       </div>

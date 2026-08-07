@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminCaseDetail({ params }: { params: { id: string } }) {
   const c = await prisma.case.findUnique({
     where: { id: params.id },
-    include: { user: true, events: { orderBy: { createdAt: "asc" } }, assignedVolunteer: true },
+    include: { user: true, events: { orderBy: { createdAt: "asc" } }, assignedVolunteer: true, incidentReport: true },
   });
   if (!c) notFound();
 
@@ -46,8 +46,8 @@ export default async function AdminCaseDetail({ params }: { params: { id: string
 
         <Section title="Needs & resources">
           <Row k="Needs" v={needs.join(", ") || "—"} />
+          {c.needsOther && <Row k="Other need" v={c.needsOther} />}
           <Row k="Already has" v={parseArr(c.have).join(", ") || "—"} />
-          <Row k="Money available" v={c.moneyAvailable || "—"} />
           <Row k="Can buy food" v={c.canBuyFood ? "Yes" : "No"} />
           <Row k="Safe tonight" v={c.safeTonight ? "Yes" : "No"} />
         </Section>
@@ -56,6 +56,18 @@ export default async function AdminCaseDetail({ params }: { params: { id: string
           <Row k="Currently safe" v={c.isSafe ? "Yes" : `No, ${c.unsafeReason || ""}`} />
           <Row k="Injured" v={c.isInjured ? "Yes" : "No"} />
           <Row k="Others present" v={c.hasOthers ? parseArr(c.othersWith).join(", ") : "No"} />
+        </Section>
+
+        <Section title="How to identify them on scene">
+          {c.shareIdentity ? (
+            <>
+              <Row k="Car reg" v={c.carReg || "—"} />
+              <Row k="Surroundings" v={c.surroundings || "—"} />
+              <Row k="Wearing" v={c.wearing || "—"} />
+            </>
+          ) : (
+            <Row k="Sharing" v="The person chose not to share identifying details" />
+          )}
         </Section>
 
         <Section title="Existing help">
@@ -113,6 +125,19 @@ export default async function AdminCaseDetail({ params }: { params: { id: string
         <div className="card p-5">
           <h3 className="mb-4 font-semibold text-slate-900">Manage case</h3>
           <CaseControls caseId={c.id} status={c.status} notes={c.caseNotes} eta={c.etaMinutes} />
+        </div>
+
+        <div className="card p-5">
+          <h3 className="font-semibold text-slate-900">Incident report</h3>
+          <p className="mt-1 text-xs text-slate-500">
+            Incident No. <span className="font-semibold text-slate-700">{c.caseNumber}</span>
+          </p>
+          <Link
+            href={`/admin/incidents/${c.id}`}
+            className="btn-primary mt-3 inline-block w-full text-center text-sm"
+          >
+            {c.incidentReport ? "Open incident report" : "Complete incident report"}
+          </Link>
         </div>
 
         <div className="card p-5">

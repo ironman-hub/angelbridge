@@ -13,7 +13,7 @@ export default async function TestimonialsPage() {
     <div className="section max-w-4xl py-10">
       <h1 className="text-3xl font-bold text-slate-900">Stories from people we&apos;ve helped</h1>
       <p className="mt-2 max-w-2xl text-slate-600">
-        Real experiences from people Angel Bridge supported. If we helped you, we&apos;d love you to share yours.
+        Real experiences from people Angel Bridge Foundation supported. If we helped you, we&apos;d love you to share yours.
       </p>
 
       <div className="mt-8 grid gap-5 md:grid-cols-2">

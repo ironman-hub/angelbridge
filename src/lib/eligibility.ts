@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------------
-// Angel Bridge eligibility + risk-scoring engine
+// Angel Bridge Foundation eligibility + risk-scoring engine
 //
 // This merges the brief's "7-question gate" and the long assessment form into a
 // SINGLE comprehensive assessment. The seven eligibility criteria below are the
 // scored questions; the rest of the form feeds the risk / vulnerability scores.
 //
 // Design principle from the brief: PREVENT MISUSE WITHOUT UNFAIRLY EXCLUDING
-// PEOPLE WHO GENUINELY NEED HELP. So only the four "in scope for Angel Bridge"
+// PEOPLE WHO GENUINELY NEED HELP. So only the four "in scope for Angel Bridge Foundation"
 // criteria can make someone ineligible. Concerns about repeat use or identity
 // escalate a case to a human, they do not auto-reject it.
 // ---------------------------------------------------------------------------
@@ -77,15 +77,16 @@ const IN_SCOPE_NEEDS = new Set([
 ]);
 
 const RECOGNISED_SITUATIONS = new Set([
-  "Vehicle breakdown",
-  "Public transport disruption",
-  "Lost wallet or belongings",
-  "Accommodation problem",
-  "Medical appointment delay",
-  "Domestic emergency",
-  "Waiting for roadside recovery",
-  "Waiting for family/friend",
-  "Waiting for emergency accommodation",
+  "Waiting for roadside recovery or a breakdown company",
+  "Waiting for an ambulance or NHS transport",
+  "Waiting for the police to attend",
+  "Waiting for the fire service",
+  "Waiting for family or a friend to reach me",
+  "Waiting for a taxi or booked transport",
+  "Waiting for emergency or temporary accommodation",
+  "Waiting for a fuel delivery",
+  "Stranded after public transport was cancelled or disrupted",
+  "Waiting for another service to respond",
 ]);
 
 const VULNERABLE_COMPANIONS = new Set([
@@ -125,7 +126,7 @@ export function assess(input: AssessmentInput): Assessment {
     passed: temporary,
     essential: true,
     detail: temporary
-      ? "Waiting on a resolving event, Angel Bridge bridges the gap"
+      ? "Waiting on a resolving event, Angel Bridge Foundation bridges the gap"
       : "No resolving event identified; may need long-term support instead",
   });
 
@@ -140,16 +141,16 @@ export function assess(input: AssessmentInput): Assessment {
       : "No existing service contacted yet",
   });
 
-  // 4, Immediate need within Angel Bridge's scope (essential)
+  // 4, Immediate need within Angel Bridge Foundation's scope (essential)
   const inScope = input.needs.some((n) => IN_SCOPE_NEEDS.has(n));
   criteria.push({
     key: "immediate_scope",
-    question: "Do you need immediate practical help Angel Bridge can provide (food, water, warmth, charging, transport, hygiene, information)?",
+    question: "Do you need immediate practical help Angel Bridge Foundation can provide (food, water, warmth, charging, transport, hygiene, information)?",
     passed: inScope,
     essential: true,
     detail: inScope
       ? `Requested: ${input.needs.join(", ")}`
-      : "No requested need falls within Angel Bridge's immediate-support scope",
+      : "No requested need falls within Angel Bridge Foundation's immediate-support scope",
   });
 
   // 5, Identity (NOT essential; alternatives allowed)
@@ -205,8 +206,6 @@ export function assess(input: AssessmentInput): Assessment {
   if (input.isInjured) vuln += 20;
   if (!input.safeTonight) vuln += 15;
   if (!input.canBuyFood) vuln += 10;
-  if (input.moneyAvailable === "None") vuln += 12;
-  else if (input.moneyAvailable === "Less than £10") vuln += 8;
   if (input.hasOthers && input.othersWith.some((o) => VULNERABLE_COMPANIONS.has(o)))
     vuln += 18;
   if (input.needs.includes("Medication Collection")) vuln += 8;
@@ -221,12 +220,6 @@ export function assess(input: AssessmentInput): Assessment {
   if (!input.gpsVerified) fraud += 10;
   if (!input.emailVerified) fraud += 10;
   if (!inArea) fraud += 15;
-  // Internal inconsistency: claims plenty of money/resources yet requests basics.
-  if (
-    input.moneyAvailable === "More than £50" &&
-    input.needs.some((n) => ["Food", "Drinking Water", "Fuel"].includes(n))
-  )
-    fraud += 8;
   const fraudRiskScore = clamp(fraud);
 
   // --- Priority score (0–100): serve the vulnerable & urgent, discount risk --
