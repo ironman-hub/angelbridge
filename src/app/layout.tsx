@@ -1,37 +1,48 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
+﻿import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
+import "./globals.css";
+import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import { getCurrentUser } from "@/lib/auth";
 
-export const dynamic = "force-dynamic";
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
-const nav = [
-  { href: "/admin", label: "Overview" },
-  { href: "/admin/cases", label: "Cases" },
-  { href: "/admin/incidents", label: "Incidents" },
-  { href: "/admin/inventory", label: "Inventory" },
-  { href: "/admin/testimonials", label: "Stories" },
-  { href: "/admin/logs", label: "Audit log" },
-];
+export const metadata: Metadata = {
+  title: "Angel Bridge Foundation",
+  description:
+    "Angel Bridge Foundation bridges the gap between a crisis and the help that's coming. Immediate practical support for people stranded in Manchester.",
+  manifest: "/manifest.json",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
+  },
+};
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+export const viewport: Viewport = {
+  themeColor: "#1a4ef5",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
-  if (user.role !== "admin") redirect("/dashboard");
-
   return (
-    <div className="section max-w-6xl py-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Admin</h1>
-        <span className="chip bg-brand-100 text-brand-800">{user.email}</span>
-      </div>
-      <nav className="mt-4 flex flex-wrap gap-1 border-b border-slate-200 pb-2">
-        {nav.map((n) => (
-          <Link key={n.href} href={n.href} className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100">
-            {n.label}
-          </Link>
-        ))}
-      </nav>
-      <div className="mt-6">{children}</div>
-    </div>
+    <html lang="en-GB" className={poppins.variable}>
+      <body className="min-h-screen flex flex-col font-sans">
+        <Nav user={user} />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
+    </html>
   );
 }
